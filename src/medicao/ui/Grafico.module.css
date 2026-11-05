@@ -1,0 +1,161 @@
+.grafico {
+  direction: ltr;
+  position: relative;
+  inline-size: 100%;
+  margin-block-end: 18px;
+}
+
+.grafico svg {
+  display: block;
+  inline-size: 100%;
+  overflow: visible;
+  touch-action: pan-y;
+}
+
+.grelha {
+  stroke: var(--linha);
+  stroke-width: 1;
+  stroke-dasharray: 2 5;
+}
+
+.rotulo {
+  fill: var(--tintaSuave);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.linha {
+  fill: none;
+  stroke-width: 2.25;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.guia {
+  stroke: var(--linhaForte);
+  stroke-width: 1;
+}
+
+.paragem.descida {
+  stop-color: var(--descida);
+}
+.paragem.subida {
+  stop-color: var(--subida);
+}
+.paragem.latencia {
+  stop-color: var(--latencia);
+}
+.paragem.aviso {
+  stop-color: var(--subida);
+}
+
+.traco_descida {
+  stroke: var(--descida);
+}
+.traco_subida {
+  stroke: var(--subida);
+}
+.traco_latencia {
+  stroke: var(--latencia);
+}
+.traco_aviso {
+  stroke: var(--subida);
+}
+
+.ponto_descida {
+  fill: var(--descida);
+  stroke: var(--superficie);
+  stroke-width: 2;
+}
+.ponto_subida {
+  fill: var(--subida);
+  stroke: var(--superficie);
+  stroke-width: 2;
+}
+.ponto_latencia {
+  fill: var(--latencia);
+  stroke: var(--superficie);
+  stroke-width: 2;
+}
+.ponto_aviso {
+  fill: var(--subida);
+  stroke: var(--superficie);
+  stroke-width: 2;
+}
+
+.eixo {
+  position: absolute;
+  inset-inline-start: 46px;
+  inset-block-end: -18px;
+  color: var(--tintaSuave);
+  font-size: 0.6875rem;
+}
+
+.vazio {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding-inline: 48px;
+  color: var(--tintaSuave);
+  font-size: 0.875rem;
+  text-align: center;
+  pointer-events: none;
+}
+
+.dica {
+  position: absolute;
+  inset-block-start: 8px;
+  display: grid;
+  gap: 2px;
+  min-inline-size: 150px;
+  padding: 8px 10px;
+  border: 1px solid var(--linhaForte);
+  border-radius: 10px;
+  background: var(--superficie);
+  box-shadow: var(--sombra);
+  font-size: 0.75rem;
+  pointer-events: none;
+}
+
+.itemDica {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--tintaSuave);
+}
+
+.legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  list-style: none;
+  color: var(--tintaSuave);
+  font-size: 0.8125rem;
+}
+
+.legenda li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chave {
+  display: inline-block;
+  inline-size: 12px;
+  block-size: 4px;
+  border-radius: 2px;
+}
+
+.fundo_descida {
+  background: var(--descida);
+}
+.fundo_subida {
+  background: var(--subida);
+}
+.fundo_latencia {
+  background: var(--latencia);
+}
+.fundo_aviso {
+  background: var(--subida);
+}

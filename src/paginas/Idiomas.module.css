@@ -1,0 +1,34 @@
+.secao {
+  display: grid;
+  gap: 16px;
+  padding-block-start: 48px;
+  border-block-start: 1px solid var(--linha);
+}
+
+.secao h2 {
+  font-size: 1.125rem;
+}
+
+.lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  max-inline-size: 820px;
+}
+
+.lista a {
+  padding-block: 6px;
+  color: var(--tintaSuave);
+  font-size: 0.9375rem;
+}
+
+.lista a[aria-current="true"] {
+  color: var(--tinta);
+  font-weight: 600;
+}
+
+.nota {
+  max-inline-size: 70ch;
+  color: var(--tintaSuave);
+  font-size: 0.875rem;
+}

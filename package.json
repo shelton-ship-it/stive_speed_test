@@ -1,0 +1,62 @@
+{
+  "name": "stivespeedtest",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "start": "node .output/server/index.mjs",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "test": "vitest run",
+    "i18n": "node --env-file-if-exists=.env.local --experimental-strip-types --no-warnings scripts/traduzir.ts",
+    "i18n:verificar": "node --experimental-strip-types --no-warnings scripts/traduzir.ts --verificar",
+    "palavras": "node --env-file-if-exists=.env.local --experimental-strip-types --no-warnings scripts/palavras.ts",
+    "palavras:verificar": "node --experimental-strip-types --no-warnings scripts/palavras.ts verificar"
+  },
+  "dependencies": {
+    "@fontsource-variable/bricolage-grotesque": "5.3.0",
+    "@fontsource-variable/instrument-sans": "5.3.0",
+    "@tanstack/react-router": "1.170.41",
+    "@tanstack/react-start": "1.168.60",
+    "d3-geo": "^3.1.1",
+    "lucide-react": "^0.575.0",
+    "nucleo": "npm:@cloudflare/speedtest@1.14.2",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.32.0",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^6.6.0",
+    "@testing-library/react": "^16.0.0",
+    "@types/d3-geo": "^3.1.0",
+    "@types/node": "^22.16.5",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.2.0",
+    "eslint": "^9.32.0",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-prettier": "^5.2.6",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^15.15.0",
+    "jsdom": "^20.0.3",
+    "nitro": "3.0.260603-beta",
+    "prettier": "^3.7.3",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.56.1",
+    "vite": "8.1.5",
+    "vite-tsconfig-paths": "^6.0.2",
+    "vitest": "^4.1.10"
+  },
+  "overrides": {
+    "rolldown": "1.2.1"
+  },
+  "description": "Stive Speed Test"
+}

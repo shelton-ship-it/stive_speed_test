@@ -1,0 +1,24 @@
+.globo {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+}
+
+.tela {
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 360px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.tela:active {
+  cursor: grabbing;
+}
+
+.dica {
+  color: var(--tintaSuave);
+  font-size: 0.75rem;
+}

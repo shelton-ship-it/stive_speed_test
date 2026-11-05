@@ -1,0 +1,39 @@
+.percurso {
+  display: grid;
+  gap: 14px;
+}
+
+.legenda {
+  min-block-size: 1.4em;
+  color: var(--tintaSuave);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.factos {
+  display: grid;
+}
+
+.fato {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 10px;
+  border-block-end: 1px solid var(--linha);
+  font-size: 0.9375rem;
+}
+
+.fato dt {
+  color: var(--tintaSuave);
+}
+
+.fato dd {
+  margin: 0;
+  text-align: end;
+  overflow-wrap: anywhere;
+}
+
+.nota {
+  color: var(--tintaSuave);
+  font-size: 0.8125rem;
+}

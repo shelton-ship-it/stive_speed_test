@@ -1,0 +1,133 @@
+.cabecalho {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 50;
+  padding-block-start: env(safe-area-inset-top, 0px);
+  border-block-end: 1px solid var(--linha);
+  background: var(--vidro);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(14px) saturate(1.2);
+}
+
+/* A última coluna reserva o espaço da cabeça da marca, desenhada por cima. */
+.linha {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  grid-template-areas: "marca nav unidade controlos";
+  align-items: center;
+  column-gap: 20px;
+  max-inline-size: var(--larguraMaxima);
+  min-block-size: var(--alturaCabecalho);
+  margin-inline: auto;
+  padding-inline: var(--margemLateral) calc(var(--margemLateral) + var(--reservaCabeca));
+}
+
+.ligacaoMarca {
+  grid-area: marca;
+  display: block;
+  border-radius: 8px;
+}
+
+.navegacao {
+  grid-area: nav;
+  display: flex;
+  gap: 4px 22px;
+  min-inline-size: 0;
+  font-size: 0.9375rem;
+}
+
+.navegacao a {
+  padding-block: 8px;
+  color: var(--tintaSuave);
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.navegacao a:hover {
+  color: var(--tinta);
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+.unidade {
+  grid-area: unidade;
+}
+
+.controlos {
+  grid-area: controlos;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.segmento {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--linha);
+  border-radius: var(--raioControlo);
+  background: var(--superficie);
+}
+
+.segmento button {
+  min-inline-size: 40px;
+  min-block-size: 32px;
+  padding: 4px 10px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--tintaSuave);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.segmento button:hover {
+  color: var(--tinta);
+}
+
+.segmento button[aria-pressed="true"] {
+  background: var(--acento);
+  color: var(--aoAcento);
+}
+
+.tema {
+  display: grid;
+  place-items: center;
+  inline-size: 40px;
+  block-size: 40px;
+  border: 1px solid var(--linha);
+  border-radius: var(--raioControlo);
+  background: var(--superficie);
+  color: var(--tinta);
+}
+
+.tema:hover {
+  border-color: var(--linhaForte);
+}
+
+.tema svg {
+  inline-size: 18px;
+  block-size: 18px;
+}
+
+/* Telemóvel: o logótipo e os controlos ficam na primeira linha (a da cabeça) e a navegação desce. */
+@media (max-width: 760px) {
+  .linha {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-areas:
+      "marca controlos controlos"
+      "nav nav unidade";
+    grid-template-rows: var(--alturaCabecalho) auto;
+    column-gap: 12px;
+    padding-inline-end: calc(var(--margemLateral) + var(--reservaCabeca));
+    padding-block-end: 8px;
+  }
+  .navegacao {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .navegacao::-webkit-scrollbar {
+    display: none;
+  }
+}

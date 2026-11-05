@@ -1,0 +1,16 @@
+logs
+*.log
+node_modules
+dist
+.output
+.tanstack
+.nitro
+.env.local
+*.local
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+
+# Local environment secrets
+.env

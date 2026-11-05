@@ -1,0 +1,135 @@
+.historico {
+  display: grid;
+  gap: 18px;
+}
+
+.nota {
+  color: var(--tintaSuave);
+  font-size: 0.875rem;
+}
+
+.vazio {
+  padding: 28px;
+  border: 1px dashed var(--linhaForte);
+  border-radius: var(--raioPainel);
+  color: var(--tintaSuave);
+  text-align: center;
+}
+
+.rolar {
+  overflow-x: auto;
+  border: 1px solid var(--linha);
+  border-radius: 14px;
+  background: var(--superficie);
+}
+
+.tabela {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  white-space: nowrap;
+}
+
+.tabela th,
+.tabela td {
+  padding: 12px 16px;
+  border-block-end: 1px solid var(--linha);
+  text-align: start;
+}
+
+.tabela tbody tr:last-child td {
+  border-block-end: 0;
+}
+
+.tabela thead th {
+  background: var(--superficieAlta);
+  color: var(--tintaSuave);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.tabela input[type="checkbox"] {
+  inline-size: 18px;
+  block-size: 18px;
+  accent-color: var(--acento);
+}
+
+.acoes {
+  display: flex;
+  gap: 2px;
+}
+
+.comparacao {
+  display: grid;
+  gap: 12px;
+}
+
+.comparacao h3 {
+  font-size: 1.125rem;
+}
+
+.ferramentas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.importar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-block-size: 40px;
+  padding: 8px 16px;
+  border: 1px solid var(--linhaForte);
+  border-radius: var(--raioControlo);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.importar:hover {
+  background: var(--superficieAlta);
+}
+
+.importar svg {
+  inline-size: 1.15em;
+  block-size: 1.15em;
+}
+
+.importar input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.importar:focus-within {
+  outline: 2px solid var(--foco);
+  outline-offset: 3px;
+}
+
+.confirmacao {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9375rem;
+}
+
+.detalhe {
+  display: grid;
+  gap: 16px;
+  margin-block-start: 12px;
+  padding: clamp(18px, 3vw, 32px);
+  border: 1px solid var(--linha);
+  border-radius: var(--raioPainel);
+  background: var(--superficie);
+}
+
+.detalheTopo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

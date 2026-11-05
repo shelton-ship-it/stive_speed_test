@@ -1,0 +1,24 @@
+.marca {
+  display: block;
+  inline-size: 168px;
+  block-size: 40px;
+  flex: none;
+}
+
+.marca img {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: contain;
+  object-position: left center;
+}
+
+@media (max-width: 520px) {
+  .marca {
+    inline-size: 120px;
+  }
+}
+
+:root[dir="rtl"] .marca img {
+  object-position: right center;
+}

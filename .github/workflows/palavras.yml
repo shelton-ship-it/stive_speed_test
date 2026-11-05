@@ -1,0 +1,84 @@
+name: Palavras chave
+
+# Pesquisa de palavras chave por idioma e mercado. Corre todos os meses, quando se
+# acrescentam exportações em dados/seo/importar, ou à mão. Abre um pull request com
+# os dados e o relatório.
+on:
+  schedule:
+    - cron: "0 6 1 * *"
+  push:
+    branches: [main]
+    paths:
+      - dados/seo/importar/**
+      - scripts/seo/**
+  workflow_dispatch:
+    inputs:
+      locales:
+        description: "Idiomas separados por vírgula (vazio processa todos)"
+        required: false
+        default: ""
+      autocompletar:
+        description: "Usar sugestões do motor de pesquisa (pode violar os termos de uso dele; use com cuidado)"
+        type: boolean
+        default: false
+
+concurrency:
+  group: palavras
+  cancel-in-progress: false
+
+permissions: {}
+
+jobs:
+  pesquisar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    # Reutiliza o ambiente e os segredos da tradução. Mantém a aprovação manual, se existir.
+    environment: traducao
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Pesquisar, classificar e mapear
+        env:
+          TRADUCAO_ENDPOINT: ${{ vars.TRADUCAO_ENDPOINT }}
+          TRADUCAO_MODELO: ${{ vars.TRADUCAO_MODELO }}
+          TRADUCAO_CONTA: ${{ secrets.TRADUCAO_CONTA }}
+          TRADUCAO_TOKEN: ${{ secrets.TRADUCAO_TOKEN }}
+          IDIOMAS: ${{ inputs.locales }}
+          AUTOCOMPLETAR: ${{ inputs.autocompletar }}
+        run: |
+          args=""
+          if [ -n "$IDIOMAS" ]; then args="$args --locale $IDIOMAS"; fi
+          if [ "$AUTOCOMPLETAR" = "true" ]; then args="$args --autocompletar"; fi
+          npm run palavras -- tudo $args --max-chamadas 300
+
+      - name: Validar e testar
+        run: |
+          npm run palavras:verificar
+          npm run typecheck
+          npm test
+
+      - name: Abrir pull request com os dados e o relatório
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: palavras/automaticas
+          add-paths: dados/seo/**
+          commit-message: "Atualiza pesquisa de palavras chave"
+          title: "Pesquisa de palavras chave"
+          labels: seo
+          body: |
+            Dados e relatório gerados por `npm run palavras -- tudo`.
+
+            Leia primeiro `dados/seo/RELATORIO.md`: mostra as lacunas de conteúdo (procura que o site ainda não responde) e a cobertura por idioma.
+
+            O que cada nível de evidência significa:
+            - alta: volume vindo de uma exportação real (Keyword Planner, Search Console, Semrush, Ahrefs);
+            - média: o termo aparece nas sugestões do motor de pesquisa;
+            - baixa: proposta da IA ainda por confirmar. A IA nunca produz volumes.

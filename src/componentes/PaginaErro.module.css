@@ -1,0 +1,29 @@
+.erro {
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 16px;
+  min-block-size: 100vh;
+  max-inline-size: 40rem;
+  margin-inline: auto;
+  padding: 32px var(--margemLateral);
+}
+
+.erro h1 {
+  font-size: clamp(2rem, 6vw, 3rem);
+}
+
+.erro p {
+  color: var(--tintaSuave);
+}
+
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+}
+
+.ligacao {
+  font-weight: 600;
+}

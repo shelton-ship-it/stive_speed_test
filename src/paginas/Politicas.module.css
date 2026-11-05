@@ -1,0 +1,99 @@
+.pagina {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  grid-template-areas:
+    "cabeca cabeca"
+    "indice corpo";
+  gap: 40px 56px;
+}
+
+.cabeca {
+  grid-area: cabeca;
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+}
+
+.cabeca h1 {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  letter-spacing: -0.02em;
+}
+
+.atualizado {
+  color: var(--tintaSuave);
+  font-size: 0.9375rem;
+}
+
+.indice {
+  grid-area: indice;
+  align-self: start;
+  position: sticky;
+  inset-block-start: calc(var(--alturaCabecalho) + 24px);
+}
+
+.indice h2 {
+  margin-block-end: 12px;
+  color: var(--tintaSuave);
+  font-family: var(--fonteTexto);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.indice ol {
+  display: grid;
+  gap: 2px;
+  list-style: none;
+}
+
+.indice a {
+  display: block;
+  padding: 8px 0;
+  border-block-end: 1px solid var(--linha);
+  color: var(--tinta);
+  font-size: 0.9375rem;
+  text-decoration: none;
+}
+
+.indice a:hover {
+  color: var(--acentoTexto);
+}
+
+.corpo {
+  grid-area: corpo;
+  display: grid;
+  gap: 48px;
+  max-inline-size: 72ch;
+}
+
+.secao {
+  display: grid;
+  gap: 14px;
+  scroll-margin-block-start: calc(var(--alturaCabecalho) + 16px);
+}
+
+.secao h2 {
+  font-size: clamp(1.25rem, 2.5vw, 1.625rem);
+}
+
+.secao p {
+  color: var(--tintaSuave);
+  line-height: 1.7;
+}
+
+.ligacoes {
+  display: flex;
+  gap: 24px;
+}
+
+@media (max-width: 860px) {
+  .pagina {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "cabeca"
+      "indice"
+      "corpo";
+  }
+  .indice {
+    position: static;
+  }
+}

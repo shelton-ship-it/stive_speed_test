@@ -1,0 +1,7 @@
+.principal {
+  display: grid;
+  gap: 88px;
+  max-inline-size: var(--larguraMaxima);
+  margin-inline: auto;
+  padding: clamp(32px, 6vw, 72px) var(--margemLateral) 0;
+}

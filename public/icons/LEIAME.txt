@@ -1,0 +1,9 @@
+Coloque aqui os icones oficiais da plataforma, com estes nomes exatos:
+
+  icon-192.png            192 x 192, fundo opaco ou transparente
+  icon-512.png            512 x 512
+  icon-maskable-512.png   512 x 512, com a arte dentro dos 80% centrais (zona segura)
+  apple-touch-icon.png    180 x 180, sem transparencia
+
+Sem estes ficheiros a aplicacao funciona na mesma, mas o navegador nao oferece
+um icone de instalacao proprio. Mantenha tambem /public/stive.svg (logotipo do cabecalho).

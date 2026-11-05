@@ -1,0 +1,104 @@
+/* Fino e fixo: uma linha no ecrã largo, duas no telemóvel. A altura é uma variável para o corpo da página reservar o mesmo espaço. */
+.rodape {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: 45;
+  padding-block-end: env(safe-area-inset-bottom, 0px);
+  border-block-start: 1px solid var(--linha);
+  background: var(--vidro);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(14px) saturate(1.2);
+  color: var(--tintaSuave);
+  font-size: 0.8125rem;
+}
+
+.conteudo {
+  display: flex;
+  align-items: center;
+  gap: 6px 24px;
+  max-inline-size: var(--larguraMaxima);
+  min-block-size: var(--alturaRodape);
+  margin-inline: auto;
+  padding-inline: var(--margemLateral);
+}
+
+.direitos {
+  white-space: nowrap;
+}
+
+.ligacoes {
+  display: flex;
+  gap: 4px 20px;
+  margin-inline-start: auto;
+}
+
+.ligacoes a,
+.fornecedor a {
+  color: var(--tinta);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.ligacoes a {
+  padding-block: 12px;
+}
+
+.ligacoes a:hover,
+.fornecedor a:hover {
+  color: var(--acentoTexto);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.redes {
+  display: flex;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.redes a {
+  display: grid;
+  place-items: center;
+  inline-size: 36px;
+  block-size: 36px;
+  border-radius: 8px;
+  color: var(--tintaSuave);
+}
+
+.redes a:hover {
+  background: var(--superficieAlta);
+  color: var(--tinta);
+}
+
+.fornecedor {
+  white-space: nowrap;
+}
+
+/* Ecrã médio: sai o texto de direitos. */
+@media (max-width: 900px) {
+  .direitos {
+    display: none;
+  }
+}
+
+/* Telemóvel: duas linhas compactas. Primeira, ligações e redes. Segunda, o fornecedor. */
+@media (max-width: 640px) {
+  .conteudo {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    row-gap: 0;
+    padding-block: 2px;
+  }
+  .ligacoes {
+    margin-inline-start: 0;
+  }
+  .fornecedor {
+    flex-basis: 100%;
+    padding-block-end: 6px;
+    font-size: 0.75rem;
+    text-align: center;
+  }
+}

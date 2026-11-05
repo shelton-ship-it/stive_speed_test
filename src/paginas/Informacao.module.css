@@ -1,0 +1,142 @@
+.secao {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  gap: 24px 56px;
+  padding-block-start: 48px;
+  border-block-start: 1px solid var(--linha);
+}
+
+.cabeca {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.cabeca h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.cabeca p {
+  color: var(--tintaSuave);
+  max-inline-size: 38ch;
+}
+
+.passos {
+  display: grid;
+  gap: 0;
+  list-style: none;
+  counter-reset: passo;
+}
+
+.passos li {
+  position: relative;
+  padding-block: 20px;
+  padding-inline-start: 64px;
+  border-block-end: 1px solid var(--linha);
+  max-inline-size: 68ch;
+  counter-increment: passo;
+}
+
+.passos li:first-child {
+  padding-block-start: 0;
+}
+
+.passos li::before {
+  content: counter(passo);
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 14px;
+  color: var(--acentoTexto);
+  font-family: var(--fonteTitulo);
+  font-size: 2.25rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.passos li:first-child::before {
+  inset-block-start: -6px;
+}
+
+.medidas {
+  display: grid;
+  gap: 0;
+  max-inline-size: 68ch;
+}
+
+.medidas > div {
+  display: grid;
+  grid-template-columns: minmax(130px, 1fr) minmax(0, 3fr);
+  gap: 8px 24px;
+  padding-block: 16px;
+  border-block-end: 1px solid var(--linha);
+}
+
+.medidas > div:first-child {
+  padding-block-start: 0;
+}
+
+.medidas dt {
+  font-family: var(--fonteTitulo);
+  font-weight: 600;
+}
+
+.medidas dd {
+  color: var(--tintaSuave);
+}
+
+.faq {
+  max-inline-size: 72ch;
+}
+
+.faq details {
+  border-block-end: 1px solid var(--linha);
+}
+
+.faq details:first-child {
+  border-block-start: 1px solid var(--linha);
+}
+
+.faq summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 18px;
+  font-family: var(--fonteTitulo);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  list-style: none;
+  cursor: pointer;
+}
+
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq summary::after {
+  content: "+";
+  flex: none;
+  color: var(--acentoTexto);
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.faq details[open] summary::after {
+  transform: rotate(45deg);
+}
+
+.faq details p {
+  padding-block-end: 20px;
+  color: var(--tintaSuave);
+}
+
+@media (max-width: 860px) {
+  .secao {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .medidas > div {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

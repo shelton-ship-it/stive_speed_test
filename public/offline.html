@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="robots" content="noindex" />
+    <title>Stive Speed Test</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --f: #f4f5f8;
+        --t: #11141b;
+        --s: #535c6b;
+        --l: rgb(17 20 27/0.12);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --f: #0d1017;
+          --t: #eef1f6;
+          --s: #a5aebd;
+          --l: rgb(255 255 255/0.09);
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: var(--f);
+        color: var(--t);
+        font:
+          400 1rem/1.6 system-ui,
+          sans-serif;
+      }
+      main {
+        max-width: 34rem;
+        display: grid;
+        gap: 14px;
+        padding: 32px;
+        border: 1px solid var(--l);
+        border-radius: 18px;
+      }
+      h1 {
+        margin: 0;
+        font-size: 1.5rem;
+        line-height: 1.2;
+      }
+      p {
+        margin: 0;
+        color: var(--s);
+      }
+      button {
+        justify-self: start;
+        min-height: 44px;
+        padding: 8px 20px;
+        border: 0;
+        border-radius: 10px;
+        background: #f27a1a;
+        color: #140c05;
+        font:
+          600 1rem system-ui,
+          sans-serif;
+        cursor: pointer;
+      }
+      button:focus-visible {
+        outline: 3px solid #ff9a4d;
+        outline-offset: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Sem ligação à internet</h1>
+      <p>O teste de velocidade precisa de internet para funcionar. Ligue-se e tente de novo.</p>
+      <p lang="en">
+        There is no internet connection. A speed test needs internet to work. Reconnect and try
+        again.
+      </p>
+      <button type="button" onclick="location.reload()">Tentar de novo / Try again</button>
+    </main>
+  </body>
+</html>

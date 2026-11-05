@@ -1,0 +1,18 @@
+{
+  "versao": 3,
+  "manterIgual": [
+    "Mbps",
+    "MB/s",
+    "IP",
+    "VPN",
+    "WiFi",
+    "HTTPS",
+    "JSON",
+    "CSV",
+    "PDF",
+    "bufferbloat",
+    "Stive",
+    "Cloudflare"
+  ],
+  "nota": "Os termos em manterIgual têm de aparecer inalterados na tradução sempre que aparecem na origem."
+}

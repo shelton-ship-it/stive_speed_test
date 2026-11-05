@@ -1,0 +1,83 @@
+name: Traduzir
+
+# Corre quando os textos de origem mudam, ou à mão. Gera as traduções, valida-as e
+# abre um pull request com o resultado.
+on:
+  push:
+    branches: [main]
+    paths:
+      - src/medicao/textos/pt.ts
+      - src/medicao/textos/en.ts
+      - src/medicao/textos/locais.ts
+      - scripts/i18n/glossario.json
+  workflow_dispatch:
+    inputs:
+      locales:
+        description: "Idiomas separados por vírgula (vazio traduz todos)"
+        required: false
+        default: ""
+      forcar:
+        description: "Retraduzir tudo, ignorando a cache"
+        type: boolean
+        default: false
+
+# Uma execução de cada vez, para duas execuções nunca escreverem sobre as mesmas traduções.
+concurrency:
+  group: traduzir
+  cancel-in-progress: false
+
+# Sem permissões por omissão; só o trabalho abaixo recebe as que precisa.
+permissions: {}
+
+jobs:
+  traduzir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    # O ambiente "traducao" guarda os segredos e pode exigir aprovação manual.
+    environment: traducao
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Traduzir o que falta ou mudou
+        env:
+          TRADUCAO_ENDPOINT: ${{ vars.TRADUCAO_ENDPOINT }}
+          TRADUCAO_MODELO: ${{ vars.TRADUCAO_MODELO }}
+          TRADUCAO_CONTA: ${{ secrets.TRADUCAO_CONTA }}
+          TRADUCAO_TOKEN: ${{ secrets.TRADUCAO_TOKEN }}
+          # Os valores de entrada passam por variáveis de ambiente, nunca colados no comando.
+          IDIOMAS: ${{ inputs.locales }}
+          FORCAR: ${{ inputs.forcar }}
+        run: |
+          args=""
+          if [ -n "$IDIOMAS" ]; then args="$args --locale $IDIOMAS"; fi
+          if [ "$FORCAR" = "true" ]; then args="$args --forcar"; fi
+          npm run i18n -- $args --max-chamadas 400
+
+      - name: Validar e testar
+        run: |
+          npm run i18n:verificar
+          npm run typecheck
+          npm test
+
+      - name: Abrir pull request com as traduções
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: traducoes/automaticas
+          add-paths: src/medicao/textos/gerado/**
+          commit-message: "Atualiza traduções automáticas"
+          title: "Traduções automáticas"
+          labels: traducoes
+          body: |
+            Traduções geradas por IA a partir de `pt.ts` (com `en.ts` como referência).
+
+            Todas passaram a validação automática: marcadores intactos, termos protegidos (Stive, Cloudflare, Mbps), escrita correta, sem hífen, travessão, marcação ou caracteres invisíveis.
+
+            Um idioma passa a ser publicado no site no momento em que o seu ficheiro é fundido.

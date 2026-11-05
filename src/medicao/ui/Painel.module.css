@@ -1,0 +1,66 @@
+.tempoReal {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+  gap: 48px;
+}
+
+.coluna {
+  display: grid;
+  gap: 40px;
+  align-content: start;
+  min-inline-size: 0;
+}
+
+.bloco {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+  min-inline-size: 0;
+}
+
+.blocoCabeca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 20px;
+}
+
+.blocoCabeca h2 {
+  font-size: 1.375rem;
+}
+
+.factos {
+  display: grid;
+}
+
+.fato {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 12px;
+  border-block-end: 1px solid var(--linha);
+  font-size: 0.9375rem;
+}
+
+.fato dt {
+  color: var(--tintaSuave);
+}
+
+.fato dd {
+  margin: 0;
+  text-align: end;
+  overflow-wrap: anywhere;
+}
+
+.nota {
+  color: var(--tintaSuave);
+  font-size: 0.8125rem;
+}
+
+@media (max-width: 900px) {
+  .tempoReal {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+  }
+}
