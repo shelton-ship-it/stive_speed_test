@@ -138,6 +138,20 @@ function corpoGemini(pedido: PedidoCliente, cfg: ConfigFornecedor): Record<strin
   return corpo;
 }
 
+/** Mensagem de erro devolvida pelo serviço (curta, sem segredos), para diagnosticar recusas. */
+async function detalheErro(resposta: Response): Promise<string> {
+  try {
+    const d = (await resposta.json()) as {
+      error?: { message?: unknown; status?: unknown };
+      errors?: Array<{ message?: unknown }>;
+    };
+    const m = d?.error?.message ?? d?.errors?.[0]?.message ?? d?.error?.status;
+    return typeof m === "string" && m ? `: ${m.slice(0, 200)}` : "";
+  } catch {
+    return "";
+  }
+}
+
 export function criarCliente(cfg: ConfigFornecedor): Cliente {
   const buscar = cfg.buscar ?? fetch;
   const esperar = cfg.esperar ?? ((ms: number) => new Promise<void>((r) => setTimeout(r, ms)));
@@ -177,7 +191,9 @@ export function criarCliente(cfg: ConfigFornecedor): Cliente {
           ultimo = `estado ${resposta.status}`;
         } else if (!resposta.ok) {
           // Erros do pedido (token, modelo, corpo) não melhoram com repetição.
-          throw new ErroFatal(`pedido recusado, estado ${resposta.status}`);
+          throw new ErroFatal(
+            `pedido recusado, estado ${resposta.status} em ${new URL(url).host}${await detalheErro(resposta)}`,
+          );
         } else {
           const dados = await resposta.json();
           if ((dados as { success?: boolean }).success === false) {
