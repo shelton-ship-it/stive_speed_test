@@ -12,5 +12,4 @@ dist
 .idea
 .DS_Store
 
-# Local environment secrets
 .env
