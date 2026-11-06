@@ -47,6 +47,7 @@ jobs:
 
       - name: Pesquisar, classificar e mapear
         env:
+          TRADUCAO_FORNECEDOR: ${{ vars.TRADUCAO_FORNECEDOR }}
           TRADUCAO_ENDPOINT: ${{ vars.TRADUCAO_ENDPOINT }}
           TRADUCAO_MODELO: ${{ vars.TRADUCAO_MODELO }}
           TRADUCAO_CONTA: ${{ secrets.TRADUCAO_CONTA }}
