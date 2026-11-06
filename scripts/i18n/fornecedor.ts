@@ -6,12 +6,22 @@
  * com cabeçalho Authorization Bearer e corpo { messages, max_tokens, temperature }.
  * A resposta traz o texto em result.response (ou, em modelos compatíveis,
  * em choices[0].message.content).
+ *
+ * Alternativa: TRADUCAO_FORNECEDOR=gemini usa a API Gemini (Google AI Studio):
+ * POST {endpoint}/models/{modelo}:generateContent com o cabeçalho x-goog-api-key.
+ * Nesse modo só TRADUCAO_TOKEN (a chave Google) é obrigatória.
  */
 import { lerObjetoJson, montarMensagens, type PedidoLote } from "./prompt.ts";
 
 export type Fornecedor = (pedido: PedidoLote) => Promise<Record<string, unknown>>;
 
+export type TipoFornecedor = "cloudflare" | "gemini";
+
+export const ENDPOINT_GEMINI = "https://generativelanguage.googleapis.com/v1beta";
+
 export type ConfigFornecedor = {
+  /** Omitido equivale a "cloudflare". */
+  tipo?: TipoFornecedor;
   endpoint: string;
   conta: string;
   token: string;
@@ -40,6 +50,17 @@ export function configDoAmbiente(env: Record<string, string | undefined>): Confi
     if (!v) throw new ErroFatal(`Variável de ambiente em falta: ${nome}`);
     return v;
   };
+  if (env.TRADUCAO_FORNECEDOR?.trim().toLowerCase() === "gemini") {
+    return {
+      tipo: "gemini",
+      // TRADUCAO_ENDPOINT é da Cloudflare e é ignorado aqui, para uma variável antiga não desviar o pedido.
+      endpoint: ENDPOINT_GEMINI,
+      conta: "",
+      token: em("TRADUCAO_TOKEN"),
+      modelo: env.TRADUCAO_MODELO?.trim() || "gemini-flash-latest",
+      modoJson: env.TRADUCAO_MODO_JSON !== "0",
+    };
+  }
   return {
     endpoint: em("TRADUCAO_ENDPOINT").replace(/\/+$/, ""),
     conta: em("TRADUCAO_CONTA"),
@@ -69,19 +90,75 @@ export type PedidoCliente = {
 /** Cliente genérico: envia mensagens e devolve o objeto JSON da resposta. */
 export type Cliente = (pedido: PedidoCliente) => Promise<Record<string, unknown>>;
 
+/** Converte o esquema JSON para o subconjunto que a API Gemini aceita (tipos em maiúsculas). */
+export function esquemaParaGemini(e: unknown): unknown {
+  if (Array.isArray(e)) return e.map(esquemaParaGemini);
+  if (!e || typeof e !== "object") return e;
+  return Object.fromEntries(
+    Object.entries(e as Record<string, unknown>).map(([k, v]) => [
+      k,
+      k === "type" && typeof v === "string" ? v.toUpperCase() : esquemaParaGemini(v),
+    ]),
+  );
+}
+
+function textoGemini(dados: unknown): unknown {
+  const d = dados as {
+    candidates?: Array<{ content?: { parts?: Array<{ text?: unknown; thought?: unknown }> } }>;
+  };
+  const partes = d?.candidates?.[0]?.content?.parts;
+  if (!Array.isArray(partes)) return undefined;
+  return partes
+    .filter((p) => p && p.thought !== true && typeof p.text === "string")
+    .map((p) => p.text as string)
+    .join("");
+}
+
+function corpoGemini(pedido: PedidoCliente, cfg: ConfigFornecedor): Record<string, unknown> {
+  const sistema = pedido.messages
+    .filter((m) => m.role === "system")
+    .map((m) => m.content)
+    .join("\n");
+  const geracao: Record<string, unknown> = {
+    temperature: 0,
+    // Os modelos com raciocínio contam o pensamento neste limite: folga para a resposta não ser cortada.
+    maxOutputTokens: Math.min(65_536, pedido.maxTokens * 2 + 2048),
+  };
+  if (cfg.modoJson) {
+    geracao.responseMimeType = "application/json";
+    if (pedido.esquema) geracao.responseSchema = esquemaParaGemini(pedido.esquema);
+  }
+  const corpo: Record<string, unknown> = {
+    contents: pedido.messages
+      .filter((m) => m.role !== "system")
+      .map((m) => ({ role: "user", parts: [{ text: m.content }] })),
+    generationConfig: geracao,
+  };
+  if (sistema) corpo.systemInstruction = { parts: [{ text: sistema }] };
+  return corpo;
+}
+
 export function criarCliente(cfg: ConfigFornecedor): Cliente {
   const buscar = cfg.buscar ?? fetch;
   const esperar = cfg.esperar ?? ((ms: number) => new Promise<void>((r) => setTimeout(r, ms)));
   const tentativas = cfg.tentativas ?? 3;
-  const url = `${cfg.endpoint}/accounts/${encodeURIComponent(cfg.conta)}/ai/run/${cfg.modelo}`;
+  const gemini = cfg.tipo === "gemini";
+  const url = gemini
+    ? `${cfg.endpoint}/models/${encodeURIComponent(cfg.modelo)}:generateContent`
+    : `${cfg.endpoint}/accounts/${encodeURIComponent(cfg.conta)}/ai/run/${cfg.modelo}`;
+  const cabecalhos: Record<string, string> = gemini
+    ? { "x-goog-api-key": cfg.token, "Content-Type": "application/json" }
+    : { Authorization: `Bearer ${cfg.token}`, "Content-Type": "application/json" };
 
   return async (pedido) => {
-    const corpo: Record<string, unknown> = {
-      messages: pedido.messages,
-      max_tokens: pedido.maxTokens,
-      temperature: 0,
-    };
-    if (cfg.modoJson && pedido.esquema) {
+    const corpo: Record<string, unknown> = gemini
+      ? corpoGemini(pedido, cfg)
+      : {
+          messages: pedido.messages,
+          max_tokens: pedido.maxTokens,
+          temperature: 0,
+        };
+    if (!gemini && cfg.modoJson && pedido.esquema) {
       corpo.response_format = { type: "json_schema", json_schema: pedido.esquema };
     }
 
@@ -92,7 +169,7 @@ export function criarCliente(cfg: ConfigFornecedor): Cliente {
       try {
         const resposta = await buscar(url, {
           method: "POST",
-          headers: { Authorization: `Bearer ${cfg.token}`, "Content-Type": "application/json" },
+          headers: cabecalhos,
           body: JSON.stringify(corpo),
           signal: controlo.signal,
         });
@@ -106,7 +183,7 @@ export function criarCliente(cfg: ConfigFornecedor): Cliente {
           if ((dados as { success?: boolean }).success === false) {
             throw new ErroFatal("o serviço respondeu com success falso");
           }
-          const objeto = lerObjetoJson(textoDaResposta(dados));
+          const objeto = lerObjetoJson(gemini ? textoGemini(dados) : textoDaResposta(dados));
           if (objeto) return objeto;
           ultimo = "resposta sem JSON válido";
         }
