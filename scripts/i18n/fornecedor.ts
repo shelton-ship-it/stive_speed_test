@@ -192,7 +192,7 @@ export function criarCliente(cfg: ConfigFornecedor): Cliente {
         } else if (!resposta.ok) {
           // Erros do pedido (token, modelo, corpo) não melhoram com repetição.
           throw new ErroFatal(
-            `pedido recusado, estado ${resposta.status} em ${new URL(url).host}${await detalheErro(resposta)}`,
+            `pedido recusado, estado ${resposta.status} em ${new URL(url).host}${await detalheErro(resposta)}${resposta.status === 401 || resposta.status === 403 ? ` (chave enviada: ${cfg.token.slice(0, 10)}…, ${cfg.token.length} caracteres)` : ""}`,
           );
         } else {
           const dados = await resposta.json();
