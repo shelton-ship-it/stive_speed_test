@@ -62,13 +62,18 @@ jobs:
           if [ "$FORCAR" = "true" ]; then args="$args --forcar"; fi
           npm run i18n -- $args --max-chamadas 400
 
+      # Corre mesmo que a tradução tenha parado a meio (quota, limite de chamadas):
+      # o que ficou traduzido e validado é guardado em vez de se perder.
       - name: Validar e testar
+        id: validar
+        if: ${{ !cancelled() }}
         run: |
           npm run i18n:verificar
           npm run typecheck
           npm test
 
       - name: Abrir pull request com as traduções
+        if: ${{ !cancelled() && steps.validar.outcome == 'success' }}
         uses: peter-evans/create-pull-request@v7
         with:
           branch: traducoes/automaticas
