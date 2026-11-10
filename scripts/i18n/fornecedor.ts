@@ -238,6 +238,9 @@ export function criarCliente(cfg: ConfigFornecedor): Cliente {
             esperas429++;
             esperaMs = Math.min(90_000, Math.ceil(segundos * 1000) + 500);
             i--;
+            console.warn(
+              `  … limite do serviço (429): a esperar ${Math.round(esperaMs / 1000)} s (espera ${esperas429} de 12)`,
+            );
           }
         } else if (!resposta.ok) {
           // Erros do pedido (token, modelo, corpo) não melhoram com repetição.
