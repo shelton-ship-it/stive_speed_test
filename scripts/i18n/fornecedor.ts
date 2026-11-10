@@ -197,14 +197,17 @@ export function criarCliente(cfg: ConfigFornecedor): Cliente {
     if (openai && /gpt-oss/i.test(cfg.modelo)) {
       // Modelos de raciocínio: pouco pensamento e folga no limite, para a resposta não vir cortada.
       corpo.reasoning_effort = "low";
-      corpo.max_tokens = pedido.maxTokens + 2048;
+      // Pedir menos tokens também poupa o limite por minuto dos planos gratuitos.
+      corpo.max_tokens = Math.min(pedido.maxTokens, 3000) + 1000;
     }
     if (!gemini && !openai && cfg.modoJson && pedido.esquema) {
       corpo.response_format = { type: "json_schema", json_schema: pedido.esquema };
     }
 
     let ultimo = "";
+    let esperas429 = 0;
     for (let i = 1; i <= tentativas; i++) {
+      let esperaMs: number | undefined;
       const controlo = new AbortController();
       const temporizador = setTimeout(() => controlo.abort(), cfg.tempoLimiteMs ?? 120_000);
       try {
@@ -216,6 +219,13 @@ export function criarCliente(cfg: ConfigFornecedor): Cliente {
         });
         if (resposta.status === 429 || resposta.status >= 500) {
           ultimo = `estado ${resposta.status}`;
+          // Limite de pedidos/tokens por minuto: espera o tempo que o serviço indica, sem gastar tentativas.
+          const segundos = Number(resposta.headers?.get?.("retry-after"));
+          if (resposta.status === 429 && segundos > 0 && esperas429 < 12) {
+            esperas429++;
+            esperaMs = Math.min(90_000, Math.ceil(segundos * 1000) + 500);
+            i--;
+          }
         } else if (!resposta.ok) {
           // Erros do pedido (token, modelo, corpo) não melhoram com repetição.
           throw new ErroFatal(
@@ -236,7 +246,7 @@ export function criarCliente(cfg: ConfigFornecedor): Cliente {
       } finally {
         clearTimeout(temporizador);
       }
-      if (i < tentativas) await esperar(1000 * 2 ** (i - 1));
+      if (i < tentativas) await esperar(esperaMs ?? 1000 * 2 ** (i - 1));
     }
     throw new ErroFornecedor(`falhou após ${tentativas} tentativas: ${ultimo}`);
   };
