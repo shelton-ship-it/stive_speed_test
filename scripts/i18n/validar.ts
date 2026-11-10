@@ -75,15 +75,21 @@ export function validarTraducao({
   }
 
   const letras = [...t].filter((c) => /\p{L}/u.test(c));
-  if (letras.length >= 12) {
-    const esperada = ESCRITA[local.escrita];
-    if (esperada) {
-      const certas = letras.filter((c) => esperada.test(c)).length;
-      if (certas / letras.length < 0.5) erros.push(`escrita inesperada para ${local.nomeIngles}`);
-    } else if (t === origem && letras.length >= 30) {
-      // Frases curtas podem ser legitimamente iguais em línguas próximas (por exemplo, Fase 2 de 5).
-      erros.push("igual à origem, sem tradução");
+  // Marcadores como {total} e termos protegidos (Stive...) são sempre latinos: não contam para a escrita.
+  let semProtegidos = t.replace(/\{\w+\}/g, " ");
+  for (const termo of glossario.manterIgual) semProtegidos = semProtegidos.split(termo).join(" ");
+  const letrasEscrita = [...semProtegidos].filter((c) => /\p{L}/u.test(c));
+  const esperada = ESCRITA[local.escrita];
+  if (esperada) {
+    if (letrasEscrita.length >= 12) {
+      const certas = letrasEscrita.filter((c) => esperada.test(c)).length;
+      if (certas / letrasEscrita.length < 0.5)
+        erros.push(`escrita inesperada para ${local.nomeIngles}`);
     }
+  } else if (letras.length >= 12 && t === origem && letras.length >= 30 && local.slug !== "ptbr") {
+    // Frases curtas podem ser legitimamente iguais em línguas próximas (por exemplo, Fase 2 de 5).
+    // O português do Brasil partilha muitas frases inteiras com o de origem, por isso não se aplica.
+    erros.push("igual à origem, sem tradução");
   }
   return erros;
 }
