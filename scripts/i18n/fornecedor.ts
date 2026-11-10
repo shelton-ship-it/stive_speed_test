@@ -173,6 +173,32 @@ async function detalheErro(resposta: Response): Promise<string> {
   }
 }
 
+/** Lê de um 429 da API Gemini quanto esperar (RetryInfo) e se a quota esgotada é a diária (QuotaFailure). */
+async function infoQuotaGemini(
+  resposta: Response,
+): Promise<{ segundos?: number; diaria: boolean }> {
+  try {
+    const d = (await resposta.json()) as { error?: { details?: Array<Record<string, unknown>> } };
+    let segundos: number | undefined;
+    let diaria = false;
+    for (const x of d?.error?.details ?? []) {
+      const tipo = String(x["@type"] ?? "");
+      if (tipo.endsWith("RetryInfo") && typeof x.retryDelay === "string") {
+        const n = parseFloat(x.retryDelay);
+        if (n > 0) segundos = n;
+      }
+      if (tipo.endsWith("QuotaFailure") && Array.isArray(x.violations)) {
+        for (const v of x.violations as Array<Record<string, unknown>>) {
+          if (/PerDay/i.test(String(v?.quotaId ?? ""))) diaria = true;
+        }
+      }
+    }
+    return { segundos, diaria };
+  } catch {
+    return { diaria: false };
+  }
+}
+
 export function criarCliente(cfg: ConfigFornecedor): Cliente {
   const buscar = cfg.buscar ?? fetch;
   const esperar = cfg.esperar ?? ((ms: number) => new Promise<void>((r) => setTimeout(r, ms)));
@@ -237,7 +263,17 @@ export function criarCliente(cfg: ConfigFornecedor): Cliente {
         if (resposta.status === 429 || resposta.status >= 500) {
           ultimo = `estado ${resposta.status}`;
           // Limite de pedidos/tokens por minuto: espera o tempo que o serviço indica, sem gastar tentativas.
-          const segundos = Number(resposta.headers?.get?.("retry-after"));
+          let segundos = Number(resposta.headers?.get?.("retry-after"));
+          if (resposta.status === 429 && gemini) {
+            const info = await infoQuotaGemini(resposta);
+            if (info.diaria) {
+              throw new ErroFatal(
+                "quota diária da API Gemini esgotada (repõe-se à meia-noite, hora do Pacífico): continua amanhã ou muda de fornecedor",
+              );
+            }
+            // Sem indicação da Google, espera um tempo fixo curto em vez de repetir de imediato.
+            segundos = info.segundos ?? 15;
+          }
           if (resposta.status === 429 && segundos > 0 && esperas429 < 12) {
             esperas429++;
             esperaMs = Math.min(90_000, Math.ceil(segundos * 1000) + 500);
