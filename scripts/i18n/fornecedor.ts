@@ -10,14 +10,19 @@
  * Alternativa: TRADUCAO_FORNECEDOR=gemini usa a API Gemini (Google AI Studio):
  * POST {endpoint}/models/{modelo}:generateContent com o cabeçalho x-goog-api-key.
  * Nesse modo só TRADUCAO_TOKEN (a chave Google) é obrigatória.
+ *
+ * TRADUCAO_FORNECEDOR=openai usa qualquer serviço compatível com a API OpenAI
+ * (Groq, OpenRouter, NVIDIA...): POST {endpoint}/chat/completions com Bearer.
+ * Por omissão aponta ao Groq; TRADUCAO_ENDPOINT e TRADUCAO_MODELO mudam o serviço.
  */
 import { lerObjetoJson, montarMensagens, type PedidoLote } from "./prompt.ts";
 
 export type Fornecedor = (pedido: PedidoLote) => Promise<Record<string, unknown>>;
 
-export type TipoFornecedor = "cloudflare" | "gemini";
+export type TipoFornecedor = "cloudflare" | "gemini" | "openai";
 
 export const ENDPOINT_GEMINI = "https://generativelanguage.googleapis.com/v1beta";
+export const ENDPOINT_OPENAI = "https://api.groq.com/openai/v1";
 
 export type ConfigFornecedor = {
   /** Omitido equivale a "cloudflare". */
@@ -58,6 +63,18 @@ export function configDoAmbiente(env: Record<string, string | undefined>): Confi
       conta: "",
       token: em("TRADUCAO_TOKEN"),
       modelo: env.TRADUCAO_MODELO?.trim() || "gemini-flash-latest",
+      modoJson: env.TRADUCAO_MODO_JSON !== "0",
+    };
+  }
+  if (env.TRADUCAO_FORNECEDOR?.trim().toLowerCase() === "openai") {
+    const ep = env.TRADUCAO_ENDPOINT?.trim();
+    return {
+      tipo: "openai",
+      // Um endpoint da Cloudflare esquecido nas variáveis não pode desviar o pedido.
+      endpoint: (ep && !ep.includes("cloudflare.com") ? ep : ENDPOINT_OPENAI).replace(/\/+$/, ""),
+      conta: "",
+      token: em("TRADUCAO_TOKEN"),
+      modelo: env.TRADUCAO_MODELO?.trim() || "openai/gpt-oss-120b",
       modoJson: env.TRADUCAO_MODO_JSON !== "0",
     };
   }
@@ -157,9 +174,12 @@ export function criarCliente(cfg: ConfigFornecedor): Cliente {
   const esperar = cfg.esperar ?? ((ms: number) => new Promise<void>((r) => setTimeout(r, ms)));
   const tentativas = cfg.tentativas ?? 3;
   const gemini = cfg.tipo === "gemini";
+  const openai = cfg.tipo === "openai";
   const url = gemini
     ? `${cfg.endpoint}/models/${encodeURIComponent(cfg.modelo)}:generateContent`
-    : `${cfg.endpoint}/accounts/${encodeURIComponent(cfg.conta)}/ai/run/${cfg.modelo}`;
+    : openai
+      ? `${cfg.endpoint}/chat/completions`
+      : `${cfg.endpoint}/accounts/${encodeURIComponent(cfg.conta)}/ai/run/${cfg.modelo}`;
   const cabecalhos: Record<string, string> = gemini
     ? { "x-goog-api-key": cfg.token, "Content-Type": "application/json" }
     : { Authorization: `Bearer ${cfg.token}`, "Content-Type": "application/json" };
@@ -168,11 +188,18 @@ export function criarCliente(cfg: ConfigFornecedor): Cliente {
     const corpo: Record<string, unknown> = gemini
       ? corpoGemini(pedido, cfg)
       : {
+          ...(openai ? { model: cfg.modelo } : {}),
           messages: pedido.messages,
           max_tokens: pedido.maxTokens,
           temperature: 0,
         };
-    if (!gemini && cfg.modoJson && pedido.esquema) {
+    if (openai && cfg.modoJson) corpo.response_format = { type: "json_object" };
+    if (openai && /gpt-oss/i.test(cfg.modelo)) {
+      // Modelos de raciocínio: pouco pensamento e folga no limite, para a resposta não vir cortada.
+      corpo.reasoning_effort = "low";
+      corpo.max_tokens = pedido.maxTokens + 2048;
+    }
+    if (!gemini && !openai && cfg.modoJson && pedido.esquema) {
       corpo.response_format = { type: "json_schema", json_schema: pedido.esquema };
     }
 
