@@ -193,7 +193,20 @@ export function criarCliente(cfg: ConfigFornecedor): Cliente {
           max_tokens: pedido.maxTokens,
           temperature: 0,
         };
-    if (openai && cfg.modoJson) corpo.response_format = { type: "json_object" };
+    if (openai && cfg.modoJson) {
+      // Com esquema estrito os valores só podem ser texto; sem ele o modelo costuma copiar a forma {pt, en}.
+      corpo.response_format =
+        pedido.esquema && /gpt-oss/i.test(cfg.modelo)
+          ? {
+              type: "json_schema",
+              json_schema: {
+                name: "traducao",
+                strict: true,
+                schema: { ...pedido.esquema, additionalProperties: false },
+              },
+            }
+          : { type: "json_object" };
+    }
     if (openai && /gpt-oss/i.test(cfg.modelo)) {
       // Modelos de raciocínio: pouco pensamento e folga no limite, para a resposta não vir cortada.
       corpo.reasoning_effort = "low";
