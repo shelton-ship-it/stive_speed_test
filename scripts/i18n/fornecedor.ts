@@ -159,11 +159,15 @@ function corpoGemini(pedido: PedidoCliente, cfg: ConfigFornecedor): Record<strin
 async function detalheErro(resposta: Response): Promise<string> {
   try {
     const d = (await resposta.json()) as {
-      error?: { message?: unknown; status?: unknown };
+      error?: { message?: unknown; status?: unknown } | string;
       errors?: Array<{ message?: unknown }>;
+      detail?: unknown;
+      message?: unknown;
+      title?: unknown;
     };
-    const m = d?.error?.message ?? d?.errors?.[0]?.message ?? d?.error?.status;
-    return typeof m === "string" && m ? `: ${m.slice(0, 200)}` : "";
+    const e = typeof d?.error === "string" ? d.error : (d?.error?.message ?? d?.error?.status);
+    const m = e ?? d?.errors?.[0]?.message ?? d?.detail ?? d?.message ?? d?.title;
+    return typeof m === "string" && m ? `: ${m.slice(0, 300)}` : "";
   } catch {
     return "";
   }
@@ -245,7 +249,7 @@ export function criarCliente(cfg: ConfigFornecedor): Cliente {
         } else if (!resposta.ok) {
           // Erros do pedido (token, modelo, corpo) não melhoram com repetição.
           throw new ErroFatal(
-            `pedido recusado, estado ${resposta.status} em ${new URL(url).host}${await detalheErro(resposta)}${resposta.status === 401 || resposta.status === 403 ? ` (chave enviada: ${cfg.token.slice(0, 10)}…, ${cfg.token.length} caracteres)` : ""}`,
+            `pedido recusado, estado ${resposta.status} em ${new URL(url).host}${new URL(url).pathname}${await detalheErro(resposta)}${resposta.status === 401 || resposta.status === 403 ? ` (chave enviada: ${cfg.token.slice(0, 10)}…, ${cfg.token.length} caracteres)` : ""}`,
           );
         } else {
           const dados = await resposta.json();
