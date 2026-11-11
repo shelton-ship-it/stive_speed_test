@@ -249,6 +249,7 @@ export function criarCliente(cfg: ConfigFornecedor): Cliente {
 
     let ultimo = "";
     let esperas429 = 0;
+    let esperas5xx = 0;
     for (let i = 1; i <= tentativas; i++) {
       let esperaMs: number | undefined;
       const controlo = new AbortController();
@@ -273,6 +274,16 @@ export function criarCliente(cfg: ConfigFornecedor): Cliente {
             }
             // Sem indicação da Google, espera um tempo fixo curto em vez de repetir de imediato.
             segundos = info.segundos ?? 15;
+          }
+          // Serviço sobrecarregado (5xx): espera cada vez mais, sem gastar tentativas, até 6 vezes.
+          if (resposta.status >= 500 && esperas5xx < 6) {
+            esperas5xx++;
+            const espera = Math.min(60, 4 * 2 ** (esperas5xx - 1));
+            esperaMs = espera * 1000;
+            i--;
+            console.warn(
+              `  … serviço indisponível (${resposta.status}): a esperar ${espera} s (espera ${esperas5xx} de 6)`,
+            );
           }
           if (resposta.status === 429 && segundos > 0 && esperas429 < 12) {
             esperas429++;
