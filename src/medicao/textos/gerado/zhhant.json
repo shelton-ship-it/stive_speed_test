@@ -1,0 +1,22 @@
+{
+  "seo.titulo": "網路速度測試下載上傳與延遲",
+  "seo.descricao": "在一分鐘內測量您的網路速度。包含下載上傳延遲與抖動以及清晰的診斷與此裝置上的私密歷史紀錄。",
+  "seo.imagemAlt": "顯示下載與上傳數值的網路速度測量器",
+  "pagina.h1": "網路速度測試",
+  "pagina.lead": "在一分鐘內測量下載上傳與延遲並了解您的連線足以應付遊戲通話與影片的需求。",
+  "nav.principal": "主要導覽",
+  "nav.teste": "測試",
+  "nav.historico": "歷史紀錄",
+  "nav.comoFunciona": "運作方式",
+  "nav.perguntas": "常見問題",
+  "marca.inicio": "首頁",
+  "a11y.saltar": "跳至內容",
+  "controlo.unidade": "速度單位",
+  "controlo.idioma": "語言",
+  "controlo.temaParaEscuro": "切換至深色主題",
+  "controlo.temaParaClaro": "切換至淺色主題",
+  "fase.inativa": "準備測量",
+  "fase.verificando": "正在檢查瀏覽器",
+  "fase.pronta": "準備開始",
+  "fase.latencia": "正在測量延遲"
+}

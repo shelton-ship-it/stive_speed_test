@@ -321,6 +321,7 @@
   "politicas.resumo.p1": "Stive Geschwindigkeitsmessung misst Ihre Verbindung direkt in Ihrem Browser. Es gibt keine Konten, es werden keine Anzeigen eingeblendet und es werden keine Analysetools oder Tracking Cookies verwendet.",
   "politicas.resumo.p2": "Die Ergebnisse und Einstellungen bleiben nur auf diesem Gerat. Wahrend des Tests kommuniziert Ihr Browser mit der Cloudflare Infrastruktur, die Ihre IP Adresse wie jeder von Ihnen besuchte Dienst empfangt.",
   "politicas.recolha.titulo": "Welche Daten wir verarbeiten",
+  "politicas.recolha.p1": "Wir erheben keine personenbezogenen Daten. Wir fragen weder nach Ihrem Namen noch nach Ihrer E Mail Adresse und erfordern keine Registrierung. Zudem senden wir Ihre Ergebnisse nicht an unsere Server.",
   "politicas.recolha.p2": "Auf Ihrem Gerat gespeichert werden das gewahlte Design und die gewahlte Geschwindigkeitseinheit, Ihr Testverlauf (Ergebnis, Datum, Profil sowie der ungefähre Standort und der verwendete Testserver) und, falls Sie die App installieren, eine Kopie der Website Dateien, damit sie schneller ladet und einen Hinweis anzeigt, wenn keine Verbindung besteht.",
   "politicas.recolha.p3": "Sie konnen den Verlauf jederzeit im Bereich Verlauf loschen und alles andere durch das Loschen der Website Daten in Ihrem Browser.",
   "politicas.cloudflare.titulo": "Was Cloudflare wahrend des Tests empfangt",
