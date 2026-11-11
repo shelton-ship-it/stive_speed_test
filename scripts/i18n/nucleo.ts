@@ -49,6 +49,8 @@ export type OpcoesLocal = {
   forcar: boolean;
   /** Chamada contada antes de cada pedido; lança erro ao passar do limite. */
   contar: () => void;
+  /** Chamada depois de cada lote validado, para gravar já o que está feito mesmo que o resto falhe. */
+  guardar?: (dic: Record<string, string>, estado: Record<string, string>) => void;
   rondasDeCorrecao?: number;
 };
 
@@ -126,6 +128,9 @@ export async function traduzirLocal(o: OpcoesLocal): Promise<{
           estado[k] = hashOrigem(o.pt[k], o.en[k] ?? "", o.glossario);
         } else proximas[k] = problemas;
       }
+      o.guardar?.(Object.fromEntries(chaves.filter((k) => k in dic).map((k) => [k, dic[k]])), {
+        ...estado,
+      });
     }
     falhadas = proximas;
     porFazer = Object.keys(proximas);
