@@ -95,6 +95,18 @@ async function traduzir(): Promise<number> {
     if (++feitas > limite) throw new ErroFornecedor(`limite de ${limite} chamadas atingido`);
   };
 
+  // Grava no disco o que já está traduzido e validado. Nunca cria um ficheiro vazio:
+  // a sua existência é um sinal de que o idioma tem conteúdo.
+  const guardar = (slug: string, dic: Record<string, string>, est: Record<string, string>) => {
+    if (Object.keys(dic).length === 0) return;
+    escreverJson(ficheiro(slug), dic);
+    estado.locais[slug] = est;
+    escreverJson(join(pasta, "_estado.json"), estado);
+    manifesto.cobertura[slug] =
+      Math.round((Object.keys(dic).length / Object.keys(origem).length) * 1000) / 1000;
+    escreverJson(join(pasta, "_ativos.json"), manifesto);
+  };
+
   let rejeitadasTotal = 0;
   for (const l of alvos) {
     const r = await traduzirLocal({
@@ -108,16 +120,9 @@ async function traduzir(): Promise<number> {
       tamanhoLote: Number(valor("lote") ?? 20),
       forcar: tem("forcar"),
       contar,
+      guardar: (d, e) => guardar(l.slug, d, e),
     });
-    // Nunca cria um ficheiro vazio: a sua existência é um sinal de que o idioma tem conteúdo.
-    if (Object.keys(r.dic).length > 0) {
-      escreverJson(ficheiro(l.slug), r.dic);
-      estado.locais[l.slug] = r.estado;
-      escreverJson(join(pasta, "_estado.json"), estado);
-      manifesto.cobertura[l.slug] =
-        Math.round((Object.keys(r.dic).length / Object.keys(origem).length) * 1000) / 1000;
-      escreverJson(join(pasta, "_ativos.json"), manifesto);
-    }
+    guardar(l.slug, r.dic, r.estado);
     const n = Object.keys(r.resultado.rejeitadas).length;
     rejeitadasTotal += n;
     console.log(
