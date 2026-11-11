@@ -46,7 +46,24 @@ jobs:
           cache: npm
       - run: npm ci
 
+      # Se há um pull request de traduções ainda por fundir, parte do trabalho dele: assim nada se
+      # perde nem se repete entre execuções, mesmo sem o fundir.
+      - name: Recuperar traduções ainda não fundidas
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          abertos=$(gh pr list --head traducoes/automaticas --state open --json number --jq length)
+          if [ "$abertos" != "0" ]; then
+            git fetch --depth=1 origin traducoes/automaticas
+            git checkout FETCH_HEAD -- src/medicao/textos/gerado
+            echo "Recuperadas as traduções do pull request aberto."
+          else
+            echo "Sem traduções pendentes."
+          fi
+
       - name: Traduzir o que falta ou mudou
+        # Pára antes do limite do trabalho: o passo falha, mas os seguintes ainda guardam o que ficou feito.
+        timeout-minutes: 35
         env:
           TRADUCAO_FORNECEDOR: ${{ vars.TRADUCAO_FORNECEDOR }}
           TRADUCAO_ENDPOINT: ${{ vars.TRADUCAO_ENDPOINT }}
@@ -73,7 +90,8 @@ jobs:
           npm test
 
       - name: Abrir pull request com as traduções
-        if: ${{ !cancelled() && steps.validar.outcome == 'success' }}
+        # Obrigatório: corre sempre, para guardar o que foi traduzido mesmo que algo tenha falhado.
+        if: ${{ always() }}
         uses: peter-evans/create-pull-request@v7
         with:
           branch: traducoes/automaticas
