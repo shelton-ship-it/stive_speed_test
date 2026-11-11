@@ -1,4 +1,13 @@
 {
   "limiar": 0.95,
-  "cobertura": {}
+  "cobertura": {
+    "es": 1,
+    "fr": 1,
+    "de": 0.997,
+    "it": 1,
+    "ar": 1,
+    "zh": 1,
+    "ptbr": 1,
+    "es419": 1
+  }
 }
