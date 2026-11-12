@@ -111,6 +111,7 @@
       "grafico.cargaTitulo": "2b82985ba157",
       "grafico.segundos": "e709ff16e0c2",
       "grafico.amostra": "877d1e6a87ba",
+      "grafico.resumo": "2e8537b34454",
       "grafico.amostras": "afa01bd80f14",
       "grafico.cargaDescida": "082d4e8b50fe",
       "grafico.cargaSubida": "d1de85385cbe",
@@ -348,8 +349,7 @@
       "politicas.termos.p4": "7d6caa5a2bbf",
       "politicas.alteracoes.titulo": "6985e365bc88",
       "politicas.alteracoes.p1": "8ae739f89ca1",
-      "politicas.alteracoes.p2": "d56e73594184",
-      "grafico.resumo": "2e8537b34454"
+      "politicas.alteracoes.p2": "d56e73594184"
     },
     "fr": {
       "seo.titulo": "24ad9b6221e8",
@@ -498,6 +498,7 @@
       "uso.trabalhoRemoto.explicacao": "79a47a04a0b1",
       "uso.jogos.limite": "62995a7daa42",
       "uso.streaming.limite": "900661cc6cbd",
+      "uso.videochamadas.limite": "e3a12167c980",
       "uso.navegacao.limite": "28252a789772",
       "uso.transferencias.limite": "8b05e610f3fc",
       "uso.trabalhoRemoto.limite": "1ea5a7899077",
@@ -584,6 +585,7 @@
       "partilha.titulo": "ada7d45ca105",
       "partilha.perfil": "d27a0380a83a",
       "partilha.aviso": "4995c809aab3",
+      "partilha.copiado": "22233f8c23d4",
       "partilha.falhouCopia": "09e322e6622d",
       "partilha.semSuporte": "16fd43813b0f",
       "erro.tempoEsgotado": "0224f816618f",
@@ -698,9 +700,7 @@
       "politicas.termos.p4": "7d6caa5a2bbf",
       "politicas.alteracoes.titulo": "6985e365bc88",
       "politicas.alteracoes.p1": "8ae739f89ca1",
-      "politicas.alteracoes.p2": "d56e73594184",
-      "uso.videochamadas.limite": "e3a12167c980",
-      "partilha.copiado": "22233f8c23d4"
+      "politicas.alteracoes.p2": "d56e73594184"
     },
     "de": {
       "seo.titulo": "24ad9b6221e8",
@@ -1050,7 +1050,8 @@
       "politicas.termos.p4": "7d6caa5a2bbf",
       "politicas.alteracoes.titulo": "6985e365bc88",
       "politicas.alteracoes.p1": "8ae739f89ca1",
-      "politicas.alteracoes.p2": "d56e73594184"
+      "politicas.alteracoes.p2": "d56e73594184",
+      "politicas.recolha.p1": "072311af3002"
     },
     "it": {
       "seo.titulo": "24ad9b6221e8",
@@ -2806,6 +2807,28 @@
       "politicas.alteracoes.titulo": "6985e365bc88",
       "politicas.alteracoes.p1": "8ae739f89ca1",
       "politicas.alteracoes.p2": "d56e73594184"
+    },
+    "zhhant": {
+      "seo.titulo": "24ad9b6221e8",
+      "seo.descricao": "90cd7296b8f3",
+      "seo.imagemAlt": "79a5531e7e65",
+      "pagina.h1": "3dcecab53bf3",
+      "pagina.lead": "e8dec52d3628",
+      "nav.principal": "5a59b3bb2fa1",
+      "nav.teste": "2322a1a686be",
+      "nav.historico": "e0ad8b6be658",
+      "nav.comoFunciona": "9a206d6dada0",
+      "nav.perguntas": "5b78467015fb",
+      "marca.inicio": "fac392673260",
+      "a11y.saltar": "fe29b0f4869e",
+      "controlo.unidade": "db03c25fb8a0",
+      "controlo.idioma": "ffdf09dfbe73",
+      "controlo.temaParaEscuro": "1c4887d31f63",
+      "controlo.temaParaClaro": "2b160d906907",
+      "fase.inativa": "b56e1d7d10f5",
+      "fase.verificando": "e62aaa8a4f13",
+      "fase.pronta": "c7a4cd7b24eb",
+      "fase.latencia": "59c9ae3b74ca"
     }
   }
 }
