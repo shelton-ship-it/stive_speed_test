@@ -1,0 +1,22 @@
+{
+  "seo.titulo": "Test de viteză pentru internet: descărcare, încărcare și latență",
+  "seo.descricao": "Măsoară viteza internetului tău în mai puțin de un minut. Descărcare, încărcare, latență și jitter cu diagnostic clar și istoric privat pe acest dispozitiv.",
+  "seo.imagemAlt": "Măsurător de viteză pentru internet cu citiri de descărcare și încărcare",
+  "pagina.h1": "Test de viteză pentru internet",
+  "pagina.lead": "Măsoară descărcarea, încărcarea și latența în mai puțin de un minut și vezi ce poate duce conexiunea ta în jocuri, apeluri și video.",
+  "nav.principal": "Navigare principală",
+  "nav.teste": "Test",
+  "nav.historico": "Istoric",
+  "nav.comoFunciona": "Cum funcționează",
+  "nav.perguntas": "Întrebări",
+  "marca.inicio": "Pagina principală",
+  "a11y.saltar": "Treci la conținut",
+  "controlo.unidade": "Unitate de viteză",
+  "controlo.idioma": "Limbă",
+  "controlo.temaParaEscuro": "Comută la tema întunecată",
+  "controlo.temaParaClaro": "Comută la tema luminoasă",
+  "fase.inativa": "Gata de măsurare",
+  "fase.verificando": "Se verifică browserul",
+  "fase.pronta": "Gata de pornire",
+  "fase.latencia": "Se măsoară latența"
+}
