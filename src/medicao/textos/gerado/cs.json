@@ -321,6 +321,7 @@
   "politicas.resumo.p1": "Stive Rychlostni Test meri Vase pripojeni primo v prohližeči. Nemá zadne učty, nezobrazuje reklamy a nepouziva analyticke nastroje ani sledovaci soubory cookie.",
   "politicas.resumo.p2": "Výsledky a předvolby zůstávají pouze v tomto zařízení. Během testu komunikuje Váš prohlížeč s infrastrukturou Cloudflare, která přijímá Vaši adresu IP jako každá jiná navštívená služba.",
   "politicas.recolha.titulo": "Jaká data zpracováváme",
+  "politicas.recolha.p1": "Neshromazdujeme osobni udaje. Nezadame jmeno, email ani zadnou registraci a neposilame vase vysledky na nas server.",
   "politicas.recolha.p2": "Ve Vašem zařízení se ukládá zvolený motiv a jednotka rychlosti, historie Vašich testů (výsledek, datum, profil, přibližná poloha a použitý testovací server) a v případě instalace aplikace také kopie souborů webu pro rychlejší načítání a zobrazení oznámení při výpadku připojení.",
   "politicas.recolha.p3": "Historii můžete kdykoli smazat v sekci Historie a vše ostatní vymazáním dat stránek v prohlížeči.",
   "politicas.cloudflare.titulo": "Co Cloudflare přijímá během testu",
@@ -337,5 +338,14 @@
   "politicas.alojamento.titulo": "Hostování a technické záznamy",
   "politicas.alojamento.p1": "Server, který poskytuje tuto stránku, může z technických a bezpečnostních důvodů zaznamenávat přijaté požadavky (adresu IP, datum a požadovanou stránku) v souladu s postupy poskytovatele hostingu.",
   "politicas.direitos.titulo": "Vaše práva",
-  "politicas.direitos.p1": "Jelikož neukládáme Vaše osobní údaje, nemáme k dispozici žádná Vaše data ke kontrole, opravě nebo smazání. Vše, co je uloženo ve Vašem zařízení, můžete kdykoli smazat."
+  "politicas.direitos.p1": "Jelikož neukládáme Vaše osobní údaje, nemáme k dispozici žádná Vaše data ke kontrole, opravě nebo smazání. Vše, co je uloženo ve Vašem zařízení, můžete kdykoli smazat.",
+  "politicas.direitos.p2": "Pro uplatnění práv ohledně údajů zpracovávaných společností Cloudflare, jako je přístup nebo vymazání, využijte kanály uvedené v jejích zásadách ochrany soukromí. Rozhodné právo vám tato práva může přiznat, například podle nařízení GDPR v Evropské unii.",
+  "politicas.termos.titulo": "Podmínky použití",
+  "politicas.termos.p1": "Služba je bezplatná a poskytovaná tak, jak je, bez záruky, že bude vždy dostupná nebo bezchybná. Výsledky jsou pouze orientační: popisují jediné měření na tomto zařízení a v tomto okamžiku a nezaručují kvalitu vašeho připojení.",
+  "politicas.termos.p2": "Službu používejte přiměřeným způsobem. Neautomatizujte hromadné testy, nesnažte se přetížit měřicí servery ani obcházet omezení služby.",
+  "politicas.termos.p3": "Název a logo Stive patří společnosti Stive. Cloudflare, X, Facebook a TikTok jsou ochranné známky jejich příslušných vlastníků a jsou zmiňovány pouze pro identifikaci poskytovatele a odkazů.",
+  "politicas.termos.p4": "V rozsahu povoleném zákonem neneseme odpovědnost za rozhodnutí učiněná na základě výsledků ani za ztráty vzniklé používáním služby.",
+  "politicas.alteracoes.titulo": "Změny a kontakt",
+  "politicas.alteracoes.p1": "Tyto zásady můžeme aktualizovat. Datum poslední aktualizace je uvedeno v horní části této stránky.",
+  "politicas.alteracoes.p2": "V případě dotazů ohledně soukromí nebo těchto podmínek využijte kontaktní stránku. Pro pomoc s používáním služby využijte stránku podpory."
 }
