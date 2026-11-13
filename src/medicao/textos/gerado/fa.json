@@ -198,6 +198,7 @@
   "diagnostico.hip.interferenciaOuFila": "علت احتمالی قطعی مقطعی ناشی از WiFi یا صف در تجهیزات است.",
   "diagnostico.hip.variacaoMovel": "اتصالات تلفن همراه به طور طبیعی در طول زمان تغییر می کنند.",
   "diagnostico.hip.limitacaoEmSegundoPlano": "مرورگرها صفحات در پس زمینه را محدود می کنند و زمان بندی ممکن است دقت خود را از دست بدهد.",
+  "diagnostico.hip.ressalvasGerais": "شبکه های VPN و پروکسی و WiFi و ترافیک همزمان می توانند روی هر سنجشی تاثیر بگذارند.",
   "diagnostico.hip.vpnOuProxy": "اگر از VPN یا پروکسی استفاده میکنید نتیجه بازتاب دهنده همان مسیر است و نه اتصال مستقیم شما.",
   "ambiente.navegador": "مرورگر",
   "ambiente.sistema": "سیستم عامل",
