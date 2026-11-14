@@ -238,6 +238,7 @@
   "erro.rede": "Nabigo ang network habang nagsusukat. Suriin ang koneksyon at subukan muli.",
   "erro.bloqueio": "Hinarangan ng browser ang mga kahilingan sa pagsukat. Suriin ang mga extension o network ng kumpanya.",
   "erro.falhaDescida": "Nabigo ang yugto ng download. Maaari mong ulitin ang pagsubok.",
+  "erro.falhaSubida": "Nabigo ang yugto ng upload. Maaaring may nakaharang na firewall o proxy sa mga kahilingan.",
   "erro.generico": "Nagkaroon ng error sa panahon ng pagsubok. Maaari mong ulitin ito.",
   "erro.naoSuportado": "Hindi sinusuportahan ng browser na ito ang mga kinakailangang tampok. Subukan ang isang kamakailang bersyon ng ibang browser.",
   "erro.outroSeparador": "Ang isa pang tab ng pahinang ito ay may tumatakbong pagsusuri. Iwasan ang sabay sabay na pagsusuri.",
